@@ -54,10 +54,25 @@
   </script>
   
   <style>
-	table, th, td {
-	  border: 1px solid black;
-	  padding: 10px;
-	}
+	table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
   </style>
   
   <table>
