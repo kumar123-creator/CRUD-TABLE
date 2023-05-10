@@ -1,5 +1,5 @@
 <script>
-	export let teams = [];
+	export let teams = []
   
 	let newTeam = {
 	  name: '',
