@@ -1,59 +1,104 @@
 <script>
-  import { afterUpdate } from 'svelte';
-
-  afterUpdate(() => {
-    document.querySelector('.js-todo-input').focus();
-  });
-
-  let todoItems = [];
-  let newTodo = '';
-
-  function addTodo() {
-    newTodo = newTodo.trim();
-    if (!newTodo) return;
-
-    const todo = {
-      text: newTodo,
-      checked: false,
-      id: Date.now(),
-    };
-
-    todoItems = [...todoItems, todo];
-    newTodo = '';
-  }
-
-  function toggleDone(id) {
-    const index = todoItems.findIndex(item => item.id === Number(id));
-    todoItems[index].checked = !todoItems[index].checked;
-  }
-
-  function deleteTodo(id) {
-    todoItems = todoItems.filter(item => item.id !== Number(id));
-  }
-</script>
-
-<main>
-  <div class="container">
-    <h1 class="app-title">todos</h1>
-    <ul class="todo-list">
-      {#each todoItems as todo (todo.id)}
-        <li class="todo-item {todo.checked ? 'done' : ''}">
-          <input id={todo.id} type="checkbox" />
-          <label for={todo.id} class="tick" on:click={() => toggleDone(todo.id)}></label>
-          <span>{todo.text}</span>
-          <button class="delete-todo" on:click={() => deleteTodo(todo.id)}>
-            <svg><use href="#delete-icon"></use></svg>
-          </button>
-        </li>
-      {/each}
-    </ul>
-    <div class="empty-state">
-      <svg class="checklist-icon"><use href="#checklist-icon"></use></svg>
-      <h2 class="empty-state__title">Add your first todo</h2>
-      <p class="empty-state__description">What do you want to get done today?</p>
-    </div>
-    <form on:submit|preventDefault={addTodo}>
-      <input class="js-todo-input" type="text" aria-label="Enter a new todo item" placeholder="E.g. Build a web app" bind:value={newTodo}>
-    </form>
-  </div>
-</main>
+	export let teams = [];
+  
+	let newTeam = {
+	  name: '',
+	  matches: '',
+	  won: '',
+	  lost: '',
+	  points: '',
+	};
+  
+	let editTeam = {
+	  name: '',
+	  matches: '',
+	  won: '',
+	  lost: '',
+	  points: '',
+	};
+  
+	function addTeam() {
+	  teams = [...teams, newTeam];
+	  newTeam = {
+		name: '',
+		matches: '',
+		won: '',
+		lost: '',
+		points: '',
+	  };
+	}
+  
+	function edit(index) {
+	  editTeam = {...teams[index]};
+	  teams.splice(index, 1);
+	}
+  
+	function updateTeam() {
+	  teams = [...teams, editTeam];
+	  editTeam = {
+		name: '',
+		matches: '',
+		won: '',
+		lost: '',
+		points: '',
+	  };
+	}
+  
+	function deleteTeam(index) {
+	  teams.splice(index, 1);
+	}
+  </script>
+  
+  <style>
+	table, th, td {
+	  border: 1px solid black;
+	  padding: 10px;
+	}
+  </style>
+  
+  <table>
+	<thead>
+	  <tr>
+		<th>Team Name</th>
+		<th>Matches</th>
+		<th>Won</th>
+		<th>Lost</th>
+		<th>Points</th>
+		<th>Actions</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  {#each teams as team, index}
+		<tr>
+		  <td>{team.name}</td>
+		  <td>{team.matches}</td>
+		  <td>{team.won}</td>
+		  <td>{team.lost}</td>
+		  <td>{team.points}</td>
+		  <td>
+			<button on:click={() => edit(index)}>Edit</button>
+			<button on:click={() => deleteTeam(index)}>Delete</button>
+		  </td>
+		</tr>
+	  {/each}
+	  <tr>
+		<td><input type="text" bind:value={newTeam.name}></td>
+		<td><input type="text" bind:value={newTeam.matches}></td>
+		<td><input type="text" bind:value={newTeam.won}></td>
+		<td><input type="text" bind:value={newTeam.lost}></td>
+		<td><input type="text" bind:value={newTeam.points}></td>
+		<td><button on:click={addTeam}>Add</button></td>
+	  </tr>
+	  <tr>
+		<td><input type="text" bind:value={editTeam.name}></td>
+		<td><input type="text" bind:value={editTeam.matches}></td>
+		<td><input type="text" bind:value={editTeam.won}></td>
+		<td><input type="text" bind:value={editTeam.lost}></td>
+		<td><input type="text" bind:value={editTeam.points}></td>
+		<td><button on:click={updateTeam}>Save</button></td>
+	  </tr>
+	</tbody>
+  </table>
+  
+  
+  
