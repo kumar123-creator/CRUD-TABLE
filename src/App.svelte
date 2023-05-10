@@ -2,6 +2,7 @@
 	export let teams = []
   
 	let newTeam = {
+	  rank:'',
 	  name: '',
 	  matches: '',
 	  won: '',
@@ -10,6 +11,7 @@
 	};
   
 	let editTeam = {
+      rank:'',
 	  name: '',
 	  matches: '',
 	  won: '',
@@ -20,6 +22,7 @@
 	function addTeam() {
 	  teams = [...teams, newTeam];
 	  newTeam = {
+		rank:'',
 		name: '',
 		matches: '',
 		won: '',
@@ -36,6 +39,7 @@
 	function updateTeam() {
 	  teams = [...teams, editTeam];
 	  editTeam = {
+		rank:'',
 		name: '',
 		matches: '',
 		won: '',
@@ -59,6 +63,7 @@
   <table>
 	<thead>
 	  <tr>
+		<th>Rank</th>
 		<th>Team Name</th>
 		<th>Matches</th>
 		<th>Won</th>
@@ -70,6 +75,7 @@
 	<tbody>
 	  {#each teams as team, index}
 		<tr>
+		  <td>{team.rank}</td>
 		  <td>{team.name}</td>
 		  <td>{team.matches}</td>
 		  <td>{team.won}</td>
@@ -82,6 +88,7 @@
 		</tr>
 	  {/each}
 	  <tr>
+		<td><input type="text" bind:value={newTeam.rank}></td>
 		<td><input type="text" bind:value={newTeam.name}></td>
 		<td><input type="text" bind:value={newTeam.matches}></td>
 		<td><input type="text" bind:value={newTeam.won}></td>
@@ -90,6 +97,7 @@
 		<td><button on:click={addTeam}>Add</button></td>
 	  </tr>
 	  <tr>
+		<td><input type="text" bind:value={editTeam.rank}></td>
 		<td><input type="text" bind:value={editTeam.name}></td>
 		<td><input type="text" bind:value={editTeam.matches}></td>
 		<td><input type="text" bind:value={editTeam.won}></td>
