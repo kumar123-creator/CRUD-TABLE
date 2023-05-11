@@ -52,8 +52,10 @@
 	  teams.splice(index, 1);
 	}
   </script>
-  
-  <style>
+ 
+ <h1>IPL POINTS TABLE</h1>
+ 
+ <style>
 	table {
     border-collapse: collapse;
     width: 100%;
@@ -73,6 +75,7 @@
   tr:nth-child(even) {
     background-color: #f2f2f2;
   }
+
   </style>
   
   <table>
