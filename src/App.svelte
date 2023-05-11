@@ -1,129 +1,95 @@
 
 <script>
-	export let teams = []
+	let tasks = [
+	  { id: 1, title: "Task 1", stage: 1 },
+	  { id: 2, title: "Task 2", stage: 1 },
+	  { id: 3, title: "Task 3", stage: 2 },
+	  { id: 4, title: "Task 4", stage: 3 }
+	];
   
-	let newTeam = {
-	  rank:'',
-	  name: '',
-	  matches: '',
-	  won: '',
-	  lost: '',
-	  points: '',
-	};
+	let newTaskTitle = "";
   
-	let editTeam = {
-      rank:'',
-	  name: '',
-	  matches: '',
-	  won: '',
-	  lost: '',
-	  points: '',
-	};
-  
-	function addTeam() {
-	  teams = [...teams, newTeam];
-	  newTeam = {
-		rank:'',
-		name: '',
-		matches: '',
-		won: '',
-		lost: '',
-		points: '',
+	function addTask() {
+	  const newTask = {
+		id: Math.max(...tasks.map(t => t.id)) + 1,
+		title: newTaskTitle,
+		stage: 1
 	  };
+	  tasks = [...tasks, newTask];
+	  newTaskTitle = "";
 	}
   
-	function edit(index) {
-	  editTeam = {...teams[index]};
-	  teams.splice(index, 1);
+	function editTask(task) {
+	  const index = tasks.findIndex(t => t.id === task.id);
+	  tasks[index] = task;
 	}
   
-	function updateTeam() {
-	  teams = [...teams, editTeam];
-	  editTeam = {
-		rank:'',
-		name: '',
-		matches: '',
-		won: '',
-		lost: '',
-		points: '',
-	  };
+	function deleteTask(task) {
+	  tasks = tasks.filter(t => t.id !== task.id);
 	}
   
-	function deleteTeam(index) {
-	  teams.splice(index, 1);
+	function handleDragStart(event, task) {
+	  event.dataTransfer.setData("text/plain", task.id);
+	}
+  
+	function handleDragOver(event) {
+	  event.preventDefault();
+	}
+  
+	function handleDrop(event, stage) {
+	  const taskId = event.dataTransfer.getData("text/plain");
+	  const task = tasks.find(t => t.id == taskId);
+	  if (task) {
+		const index = tasks.findIndex(t => t.id == task.id);
+		tasks[index].stage = stage;
+		tasks = [...tasks];
+	  }
 	}
   </script>
- 
- <style>
-	table {
-    border-collapse: collapse;
-    width: 100%;
-  }
   
-  th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-  }
-  
-  th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-  }
-  
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-
-  </style>
-  
-  <table>
-	<thead>
-	  <tr>
-		<th>Rank</th>
-		<th>Team Name</th>
-		<th>Matches</th>
-		<th>Won</th>
-		<th>Lost</th>
-		<th>Points</th>
-		<th>Actions</th>
-	  </tr>
-	</thead>
-	<tbody>
-	  {#each teams as team, index}
-		<tr>
-		  <td>{team.rank}</td>
-		  <td>{team.name}</td>
-		  <td>{team.matches}</td>
-		  <td>{team.won}</td>
-		  <td>{team.lost}</td>
-		  <td>{team.points}</td>
-		  <td>
-			<button on:click={() => edit(index)}>Edit</button>
-			<button on:click={() => deleteTeam(index)}>Delete</button>
-		  </td>
-		</tr>
-	  {/each}
-	  <tr>
-		<td><input type="text" bind:value={newTeam.rank}></td>
-		<td><input type="text" bind:value={newTeam.name}></td>
-		<td><input type="text" bind:value={newTeam.matches}></td>
-		<td><input type="text" bind:value={newTeam.won}></td>
-		<td><input type="text" bind:value={newTeam.lost}></td>
-		<td><input type="text" bind:value={newTeam.points}></td>
-		<td><button on:click={addTeam}>Add</button></td>
-	  </tr>
-	  <tr>
-		<td><input type="text" bind:value={editTeam.rank}></td>
-		<td><input type="text" bind:value={editTeam.name}></td>
-		<td><input type="text" bind:value={editTeam.matches}></td>
-		<td><input type="text" bind:value={editTeam.won}></td>
-		<td><input type="text" bind:value={editTeam.lost}></td>
-		<td><input type="text" bind:value={editTeam.points}></td>
-		<td><button on:click={updateTeam}>Save</button></td>
-	  </tr>
-	</tbody>
-  </table>
-  
-  
+  <div>
+	<h2>Task Pipeline</h2>
+	<div>
+	  <h3>To Do</h3>
+	  <ul on:drop={(event) => handleDrop(event, 1)} on:dragover={handleDragOver}>
+		{#each tasks.filter(t => t.stage === 1) as task}
+		  <li draggable={true} on:dragstart={(event) => handleDragStart(event, task)}>
+			<div>
+			  <span>{task.title}</span>
+			  <button on:click={() => deleteTask(task)}>Delete</button>
+			  <button on:click={() => editTask(task)}>Edit</button>
+			</div>
+		  </li>
+		{/each}
+	  </ul>
+	</div>
+	<div>
+	</div>
+	  <h3>In Progress</h3>
+	  <ul on:drop={(event) => handleDrop(event, 2)} on:dragover={handleDragOver}>
+		{#each tasks.filter(t => t.stage === 2) as task}
+		  <li draggable={true} on:dragstart={(event) => handleDragStart(event, task)}>
+			<div>
+			  <span>{task.title}</span>
+			  <button on:click={() => deleteTask(task)}>Delete</button>
+			  <button on:click={() => editTask(task)}>Edit</button>
+			</div>
+		  </li>
+		{/each}
+	  </ul>
+	</div>
+	<div>
+	  <h3>Done</h3>
+	  <ul on:drop={(event) => handleDrop(event, 3)} on:dragover={handleDragOver}>
+		{#each tasks.filter(t => t.stage === 3) as task}
+		  <li draggable={true} on:dragstart={(event) => handleDragStart(event, task)}>
+			<div>
+			  <span>{task.title}</span>
+			  <button on:click={() => deleteTask(task)}>Delete</button>
+			  <button on:click={() => editTask(task)}>Edit</button>
+			</div>
+		  </li>
+		{/each}
+	  </ul>
+	</div>
   
