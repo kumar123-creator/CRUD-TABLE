@@ -1,4 +1,4 @@
-<h1>IPL POINTS TABLE</h1>
+
 <script>
 	export let teams = []
   
@@ -53,8 +53,6 @@
 	  teams.splice(index, 1);
 	}
   </script>
- 
- <h1>IPL POINTS TABLE</h1>
  
  <style>
 	table {
