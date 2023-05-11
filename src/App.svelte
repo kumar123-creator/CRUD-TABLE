@@ -1,3 +1,4 @@
+<h1>IPL POINTS TABLE</h1>
 <script>
 	export let teams = []
   
